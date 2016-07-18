@@ -1,0 +1,80 @@
+<!--<div ng-include='navTemplate.url'></div>-->
+    <!-- <div> <h2>orders</h2> </div> -->
+          <div id="wrapper">
+          <div id="sidebar-wrapper" class="col-md-4 no-print">
+            <div id="sidebar">
+            <!-- <div class="col-md-4 no-print"> -->
+        <div class="panel panel-default">
+          <div class="panel-heading">Order History</div>
+          <input id="searchbox"
+            class="list-group-item"
+            type="text"
+            ng-model="nameFilter"
+            style="width:100%"
+            placeholder="Search">
+          <a ng-bind-html-unsafe="listView"></a>
+          <ul id="tableelements" class="list-group">
+            <a class="list-group-item"
+              ng-class="{'active':activeOrder.orderId===order.orderId}"
+              ng-click="makeActive(order)"
+              ng-repeat="order in orders | filter: nameFilter | orderBy:'timeStamp':true"
+              >{{order.SalesmanFirst}} {{order.trailerName}} {{order.timeStamp | date:"short"}}</a>
+          </ul>
+        </div>
+    </div>
+  </div>
+  <div id="main-wrapper" class="col-md-8">
+    <div id="main">
+      <!-- <p>Salesman First: {{activeOrder.SalesmanFirst}}</p> -->
+      <!-- <p>Salesman Last: {{activeOrder.SalesmanLast}}</p> -->
+      <p>Dealer Id: {{activeOrder.dealerId}}</p>
+      <p>Order Id: {{activeOrder.orderId}}</p>
+      <!-- <p>Quickbooks edit sequence: {{activeOrder.quickbooks_editsequence}}</p> -->
+      <!-- <p>Quickbooks listid: {{activeOrder.quickbooks_listid}}</p> -->
+      <!-- <p>Submitted: {{activeOrder.submitted}}</p> -->
+      <!-- <p>TimeStamp: {{activeOrder.timeStamp}}</p> -->
+      <p>TrailerCost: {{activeOrder.trailerCost}}</p>
+      <p>TrailerDescription: {{activeOrder.trailerDescription}}</p>
+      <p>TrailerId: {{activeOrder.trailerId}}</p>
+      <p>TrailerName: {{activeOrder.trailerName}}</p>
+
+      <div class='col-md-12 add-shadow'>
+        <table class='table table-bordered table-condensed config-print' style="margin-top: 15px">
+          <tr>
+            <th class='col-md-3'> Category </th>
+            <th class='col-md-3'> Name </th>
+            <!-- <th class='col-md-1'> Quantity </th> -->
+            <!-- <th class='col-md-1'> Cost Each </th> -->
+            <th class='col-md-1'> Cost </th>
+          </tr>
+          <tr ng-repeat='item in activeOrder.configuration.items | filter:{itemName: "!None"}:true'>
+            <td> {{item.categoryName}} </td>
+            <td> {{item.itemName}} </td>
+            <!-- <td> {{item.quantity}} </td> -->
+            <td> ${{item.itemCost}} </td>
+            <!-- <td> ${{item.quantity*item.itemCost}} </td> -->
+          </tr>
+          <tr>
+            <td colspan="3">
+              <p class="text-center">
+                Special Requests
+              </p>
+            </td>
+          </tr>
+          <tr ng-if="activeOrder.configuration.specialRequests.length ==0">
+            <td colspan="3"> No Special Requests </td>
+          </tr>
+          <tr ng-repeat="request in activeOrder.configuration.specialRequests">
+            <td colspan="1">
+              {{request.description}}
+            </td>
+            <td colspan="2">
+              {{request.cost}}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

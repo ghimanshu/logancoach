@@ -1,0 +1,30 @@
+<!-- Static navbar -->
+<div class="navbar navbar-default navbar-fixed-top add-shadow" role="navigation">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand">Logan Coach Admin</a>
+  </div>
+  <div class="navbar-collapse collapse" >
+    <ul class="nav navbar-nav">
+      <li ng-class="{'hide':admin!=true,'active':active=='item'}"><a href="#/admin/items">Items</a></li>
+      <li ng-class="{'hide':admin!=true,'active':active=='trailer'}"><a href="#/admin/trailers">Trailers</a></li>
+      <li ng-class="{'hide':admin!=true,'active':active=='user'}"><a href="#/admin/users">Users</a></li>
+      <li ng-class="{'hide':admin!=true,'active':active=='orderstatus'}"><a href="#/admin/orderstatus">Update Order Status</a></li>
+      <li ng-class="{'hide':admin!=false,'active':active=='history'}"><a href="#/dealer/history">History</a></li>
+      <li ng-class="{'hide':admin!=false,'active':active=='estimates'}"><a href="#/dealer/estimates">Estimates</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="/logout">Logout</a></li>
+    </ul>
+  </div><!--/.nav-collapse -->
+</div>
+<style>
+  body {
+    margin-top: 70px;
+  }
+</style>

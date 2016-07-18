@@ -1,0 +1,118 @@
+<!--<div ng-include='navTemplate.url'></div>-->
+
+<div id="wrapper">
+  <div id="sidebar-wrapper" class="col-md-3">
+    <div id="sidebar">
+      <div class="panel panel-default no-print">
+        <div class="panel-heading">
+          {{trailer.trailerName}}
+        </div>
+
+        <input id="searchbox" class="list-group-item" type="text" ng-model="nameFilter" style="width:100%" placeholder="Search">
+        <a ng-bind-html-unsafe="listView"></a>
+        <div ng-repeat='superCategory in config | orderBy:"id"'>
+          <h4 class="text-center">{{superCategory.name}}</h4>
+          <ul id="tableelements" class="list-group full-length" id="mainList">
+            <a class="list-group-item" ng-class="{'active':categoryopenstatus[category.name]}" ng-click="makeActive(category.name)" ng-repeat='category in superCategory.categories | filter: {name:nameFilter} | orderBy :"rank"'>{{category.name}}</a>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="main-wrapper" class="col-md-9">
+    <div id="main">
+      <div class="col-md-9">
+        <table ng-if="showOverrides" class="table">
+          <thead>
+            <th> Item </th>
+            <th> Category Name </th>
+            <th> Item Name </th>
+          </thead>
+          <tr ng-repeat="override in overrides">
+            <td> <button type='button' class='btn btn-default' ng-click='configureExclusions(override.item)'> {{override.item.categoryName}} ---> {{override.item.itemName}} </button> </td>
+            <td> {{override.override.categoryName}} </td>
+            <td> {{override.override.itemName}} </td>
+          </tr>
+        </table>
+        <div ng-repeat='superCategory in config | orderBy:"id"'>
+          <div class="panel panel-default" ng-if="categoryopenstatus[category.name]" ng-class="{'has-error panel-danger':!category.valid}" ng-repeat='category in superCategory.categories| orderBy :"rank"'>
+            <div class="panel-heading" ng-class="{'has-error panel-danger':!category.valid}">
+              <div ng-class="{'has-error panel-danger':!category.valid}">
+                <strong>{{category.name}}</strong>
+                <small>{{" MultiSelect is " + getEnabled(category.items[0].isMultiSelect)}} </small>
+                <h4 ng-if="!category.valid">ERROR {{category.errorMessage}}</h4>
+                <button class="btn btn-sm btn-primary action-button" ng-click="showCopyModal(category)">Insert Overrides</button>
+                <div ng-if="category.items[0].isMultiSelect === 'false'" class='checkbox pull-right form-group' style="margin-top: 0px">
+                  <label>
+                    <input ng-model="category.optional;" ng-change="validateCategory(category)" type="checkbox">Items are optional</label>
+                </div>
+              </div>
+            </div>
+            <div>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th class='col-md-1' ng-if="showOverrides">
+                      <button type="button" class="btn btn-block btn-primary" ng-if="selectedItemForCopy" ng-click="selectItemForCopy(null)">Clear</button>
+                    </th>
+                    <th class='col-md-3'>Name</th>
+                    <th class='col-md-1'>Default Cost</th>
+                    <th class='col-md-2'>Cost</th>
+                    <th class='col-md-1' ng-hide="category.items[0].isMultiSelect === 'true'">Standard</th>
+                    <th class='col-md-1'>available</th>
+                    <th class='col-md-1' ng-hide="'false' === category.items[0].isMultiSelect">Standard Quantity</th>
+                    <th class='col-md-1' ng-hide="'false' === category.items[0].isMultiSelect">Max Quantity</th>
+                    <th class='col-md-2'>Configure Overrides</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="item in category.items | orderBy:'itemRank'">
+                    <td ng-if="showOverrides">
+                        <button type="button" ng-show="(item.exclusions.length || selectedItemForCopy) && (item != selectedItemForCopy)" class="btn btn-sm" ng-class="(selectedItemForCopy) ? 'btn-success' : 'btn-primary'" ng-click="selectItemForCopy(item)">{{selectedItemForCopyText}}</button>
+                    </td>
+                    <td>{{item.itemName}}</td>
+                    <td>{{item.defaultPrice| currency}}</td>
+                    <td ng-class="{'has-error':!item.validCost}">
+                      <input ng-class="{'has-error':!item.validCost}" ng-change="validateCost(item);
+                                                                  validateCategory(category);" type='number' ng-model='item.itemCost' class='form-control'>
+                    </td>
+                    <td ng-hide="category.optional || category.items[0].isMultiSelect === 'true'">
+                      <input class="form-control" name='{{category.items[0].categoryId}}' ng-value="item.itemId" ng-model="category.standardItemId" ng-change="item.available = 'true';
+                                                                  validateCategory(category);" type='radio'>
+                    </td>
+                    <td ng-hide="!category.optional || category.items[0].isMultiSelect === 'true'">
+                      <input class="form-control" name='{{category.items[0].categoryId}}' ng-true-value='"true"' ng-false-value='"false"' ng-model="item.standard" ng-click="disableOtherBoxes(category, item);
+                                                              validateCategory(category);" type='checkBox'>
+                    </td>
+                    <td>
+                      <input class="form-control" type='checkbox' ng-true-value='"true"' ng-false-value='"false"' ng-change="validateCategory(category)" ng-model='item.available'>
+                    </td>
+                    <td ng-class="{'has-error':validateMultiselectItem(item)}" ng-hide="'false' === item.isMultiSelect">
+
+                      <select ng-class="{'has-error':validateMultiselectItem(item)}" class='form-control' ng-model='item.standardQuantity' ng-change="validateCategory(category)" ng-options="n for n in [] | range:0:50   "></select>
+                    </td>
+                    <td ng-class="{'has-error':validateMultiselectItem(item)}" ng-hide="'false' === item.isMultiSelect">
+                      <select class='form-control' ng-change="validateCategory(category)" ng-class="{'has-error':validateMultiselectItem(item)}" ng-model='item.maxQuantity' ng-options="n for n in [] | range:1:50"></select>
+                    </td>
+                    <td>
+                      <div class="btn-group">
+                        <button type='button' class='btn btn-sm' ng-class="(item.exclusions.length) ? 'btn-primary' : ''" ng-click='configureExclusions(item)'>Edit</button>
+                        <button type="button" class="btn btn-sm btn-success" ng-click="showItemCopyModal(item)">Copy</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-md-3">
+        <input type="button" ng-click="save()" class="btn btn-block btn-success" value="{{savingLabel}}" ng-disabled="!allCategoriesValid()">
+        <input type="button" ng-click="saveAndReturn()" class="btn btn-block btn-warning" value="Save And Return" ng-disabled="!allCategoriesValid()">
+        <button class="btn btn-block" ng-init="showOverrides = false" ng-click="showOverrides = !showOverrides">{{(showOverrides) ? "Hide" : "Show"}} Overrides({{overrides.length}})</button>
+      </div>
+    </div>
+  </div>
+</div>

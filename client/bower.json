@@ -1,0 +1,23 @@
+{
+  "name": "logancoach",
+  "description": "logancoach",
+  "version": "0.0.0",
+  "homepage": "https://github.com/angular/angular-phonecat",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "jquery": "1.10.2",
+    "jquery-ui": "1.9.x",
+    "angular": "1.4.x",
+    "bootstrap": "~3.1.1",
+    "angular-route": "1.4.x",
+    "angular-resource": "1.4.x",
+    "angular-bootstrap": "0.11.x",
+    "angular-ui-sortable": "0.13.x",
+    "angular-ui-utils": "0.2.3",
+    "angular-animate": "1.5.6"
+  },
+  "resolutions": {
+    "angular": "1.4.x"
+  }
+}

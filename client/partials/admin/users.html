@@ -1,0 +1,90 @@
+    <!--<div ng-include='navTemplate.url'></div>-->
+
+    <div class='col-md-12'> <!--upper part-->
+
+        <div class="col-md-6" >
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a class="btn btn-success btn-sm action-button" ng-click="refreshDealers()">
+                        <span class="glyphicon glyphicon-refresh"></span>
+                    </a>
+                    Dealership
+                </div>
+                <input id="searchbox"
+                       class="list-group-item"
+                       type="text"
+                       ng-model="nameFilter"
+                       style="width:100%"
+                       placeholder="Search">
+                <a ng-bind-html-unsafe="listView"></a>
+                <ul id="tableelements"
+                    class="list-group"
+                    ng-model="dealers" >
+                    <a class="list-group-item"
+                       ng-class="{'active':activeDealer.id == dealer.id}"
+                       ng-click="makeActive(dealer)"
+                       ng:repeat="dealer in dealers| filter: nameFilter"
+                       >{{dealer.name}}</a>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6" >
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              Editing: {{activeTrailer.trailerName}}
+              <div class='action-button button-group'>
+                  <button type="button" ng-click='deleteCategory()' class='btn btn-sm btn-danger'>Delete</button>
+                  <button type="button"
+                          ng-click='updateCategory()'
+                          ng-class='{"btn-primary":update === "Update","btn-warning":update === "Pending"}'
+                          ng-disabled="editCategoryForm.$invalid || editCategoryForm.$pristine"
+                          class='btn btn-sm btn-default'>{{update}}</button>
+              </div>
+            </div>
+            <div class="panel-body" style="height: 362px">
+            <div>
+                <label for="dealership-name">Dealership Name</label>
+                <p id="dealership-name">{{activeDealer.name}}</p>
+            </div>
+            <div>
+                <label for="address">Address</label>
+                <p id='address'>
+                    {{activeDealer.address1}}<br/>
+                    {{activeDealer.address2}}<br/>
+                    {{activeDealer.address3}}<br/>
+                    {{activeDealer.address4}}<br/>
+                    {{activeDealer.address5}}
+                </p>
+            </div>
+            <div>
+                <label for="phone">Phone</label>
+                <p id='phone'>{{activeDealer.phone}}</p>
+            </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-12" >
+        <table class='table table-bordered'>
+            <thead>
+                <tr>
+                    <th class="col-md-3">User Name</th>
+                    <th class="col-md-6">Email</th>
+                    <th class="col-md-1">Admin</th>
+                    <th class="col-md-2"><button type="button" ng-click="showAddUserModal()" class="btn btn-default">Add user</button></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-form ng-repeat='user in users'>
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.admin}}</td>
+                    <td>
+                      <button type="button" ng-click='showEditUserModal(user)' class='btn btn-primary'>Edit</button>
+                      <button type="button" ng-click='deleteUser(user)' class='btn btn-danger'>Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>

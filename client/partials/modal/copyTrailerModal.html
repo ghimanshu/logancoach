@@ -1,0 +1,19 @@
+<div>
+  <div class="modal-header">
+    <h3 class="modal-title">Create New Trailer</h3>
+  </div>
+  <form>
+
+    <div class="modal-body">
+      <form name="createTrailerForm">
+        <label>Copy Trailer Configuration from:</label>
+        <select ng-required="true" type="text" class="form-control" ng-model="newTrailer.copyFrom" ng-options="trailer.trailerName for trailer in trailers | orderBy: 'rank'"></select>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="save()">Save</button>
+      <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+    </div>
+    </form>
+</div>

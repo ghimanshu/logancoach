@@ -1,0 +1,205 @@
+<!-- <!--<div ng-include='navTemplate.url'></div>--> -->
+<!-- Static navbar -->
+<style>
+@media screen {
+  body {
+    margin-top: 50px;
+  }
+}
+.navbar-collapse.collapse {
+  display: block!important;
+}
+
+.navbar-nav>li, .navbar-nav {
+  float: left !important;
+}
+
+.navbar-nav.navbar-right:last-child {
+  margin-right: -15px !important;
+}
+
+.navbar-right {
+  float: right!important;
+}
+</style>
+
+<div class="navbar navbar-default navbar-fixed-top add-shadow">
+  <div class="container text-center">
+
+  <div class="navbar-header">
+    <a class="navbar-brand">{{dealerName}}</a>
+  </div>
+  <!-- <div class="navbar-collapse collapse"> -->
+  <ul class="nav navbar-nav">
+    <li><button type="button" class="btn btn-primary navbar-btn" ng-click="showAddEstimateModal()">New Estimate</button></li>
+    <li><a href="/logout">Logout</a></li>
+  </ul>
+  <form class="navbar-form navbar-right" role="search">
+    <div class="form-group">
+      <input type="text" class="form-control" ng-model="nameFilter" placeholder="Search">
+    </div>
+  </form>
+</div>
+    <!-- <input type="text" class="form-control navbar-right" style="width:100px" ng-model="nameFilter" placeholder="Filter"> -->
+  <!-- </div> -->
+</div>
+
+<div class="container no-print">
+  <div class="col-xs-12">
+    <table class="table table-hover">
+      <thead>
+        <th class="text-left"> Tracking Number </th>
+        <th class="text-left"> Customer Name </th>
+        <th style="width:140px"> MSRP </th>
+        <th style="width:90px"> Retail Price </th>
+        <th style="width:80px">
+
+        </th>
+        <th style="width:100px"> Status </th>
+        <th> Actions </th>
+        <!-- <th>Actions</th> -->
+      </thead>
+
+      <!-- <tr>
+        <td class="text-left">
+          <input type="text" class="form-control" ng-model="estimate.name" id="category-name-input" />
+        </td>
+        <td class="text-left">
+          <input type="text" class="form-control" ng-model="estimate.description" id="category-description-input" />
+        </td>
+        <td>
+          <select
+            type="text"
+            class="form-control"
+            ng-model="trailer"
+            ng-options="trailer.trailerName for trailer in trailers"
+            id="super-category-name-input">
+          </select>
+        </td>
+        <td class="text-left">
+          <input style="min-width:90px" type="text" class="form-control no-print" ng-model="estimate.retailPrice" id="category-name-input" />
+        </td>
+        <td colspan="4">
+          <button type="button" ng-click='newEstimate(estimate)' class='btn btn-block btn-primary'>Create New</button>
+        </td>
+      </tr> -->
+
+      <tr class="{{estimate.estimateId == activeEstimate.estimateId?'info':''}} animate-repeat" ng-repeat="estimate in estimates | filter: nameFilter | orderBy: '-'" ng-click="makeActive(estimate)" style="cursor:pointer">
+        <td class="text-left">
+          <span class="animate-repeat" ng-if="estimate != activeEstimate"> {{estimate.name}} </span>
+          <input ng-if="estimate.estimateId == activeEstimate.estimateId" type="text" class="form-control animate-repeat" ng-model="estimate.name" id="category-name-input" />
+        </td>
+        <td class="text-left">
+          <span class="animate-repeat" ng-if="estimate != activeEstimate"> {{estimate.description}} </span>
+          <input ng-if="estimate.estimateId == activeEstimate.estimateId" type="text" class="form-control animate-repeat" ng-model="estimate.description" id="category-description-input" />
+        </td>
+        <td>
+          <span class="animate-repeat" ng-if="estimate != activeEstimate">{{estimate.configuredCost | currency:"$":0}}</span>
+          <pre class="text-right animate-repeat" ng-if="estimate.estimateId == activeEstimate.estimateId && estimate.valid">Type: <a href="{{estimate.trailerUrl}}" target="_blank">{{estimate.trailerName}}</a>
+Base: {{estimate.trailerCost | currency:"$":0}}
+Upgrades: {{estimate.upgradeCost | currency:"$":0}}
+Total: {{estimate.configuredCost | currency:"$":0}}</pre>
+        </td>
+        <td class="text-left">
+          <span class="animate-repeat" ng-if="estimate != activeEstimate"> {{estimate.retailPrice | currency:"$":0}} </span>
+          <input type="text" ng-if="estimate.estimateId == activeEstimate.estimateId" class="form-control animate-repeat" ng-model="estimate.retailPrice" id="category-name-input" />
+        </td>
+        <td>
+          <button ng-if="estimate==activeEstimate" type="button" ng-click='updateEstimate(estimate)' class='btn btn-block btn-primary'>Save</button>
+        </td>
+        <td class="text-right" style="width:200px">
+          {{estimate.status}}
+          <!-- <button type="button" style="width:100px" ng-if='estimate.status == "Needs Configuring"' ng-click='configureEstimate()' class='btn btn-success'>Configure</button>
+          <button type="button" style="width:100px" ng-if='estimate.status == "Ready to Order"' ng-click='placeOrder()' class='btn btn-warning'>Order</button> -->
+        </td>
+        <td class="text-left">
+          <div class="btn-group" role="group" style="width:178px;background:gray;">
+            <button type="button" ng-if="estimate.valid == 'true'" ng-click='printEstimate(estimate)' class='btn btn-lg btn-primary'><span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>
+
+            <button type="button" ng-if="estimate.status == 'Ready to Order'" ng-click='placeOrder()' class='btn btn-lg btn-warning'><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button>
+            <button type="button" ng-click='configureEstimate(estimate)' class='btn btn-lg btn-success'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></button>
+          </div>
+        </td>
+        <!-- <td> -->
+          <!-- <button ng-hide='estimate.valid!=="true"' type="button" ng-click='placeOrder()' class='btn btn-warning'>Place Order</button> -->
+          <!-- <button ng-hide='estimate.valid!=="true"' type="button" onclick='window.print()' class='btn btn-primary'>Print</button> -->
+          <!-- <button type="button" ng-click='deleteEstimate()' class='btn btn-danger'>Delete</button> -->
+          <!-- <button type="button" ng-click='updateEstimate()' ng-class='{"btn-primary":update==="Update","btn-warning":update==="Pending"}' ng-disabled="estimateForm.$invalid||estimateForm.$pristine" class='btn'>{{update}}</button> -->
+          <!-- <button type="button" ng-click='configureEstimate()' class='btn btn-primary'>Configure</button> -->
+        <!-- </td> -->
+      </tr>
+    </table>
+
+  </div>
+</div>
+
+
+<div class='col-xs-12 print-only'>
+  <table style="width:100%">
+    <tr>
+      <td class="text-left" style="width:200px">
+        <img class="print-only" width="200px" src="/assets/logo.png" alt="" />
+      </td>
+      <td class="text-left">
+        <h4>{{dealerName}}</h4>
+        <div> <label>Trailer Name: </label>{{activeEstimate.trailerName}}</div>
+        <div>
+        <label>Tracking Number:</label>
+          {{activeEstimate.name}}
+        </div>
+        <div>
+        <label>Customer Name:</label>
+          {{activeEstimate.description}}
+        </div>
+      </td>
+      <td class="text-left" style="width:100px;">
+        <div> <strong>Base Price:</strong></div>
+        <div> <strong>Upgrades: </strong></div>
+        <div> <strong>Total MSRP:</strong></div>
+        <div> <strong>Retail Price:</strong></div>
+      </td>
+      <td class="text-right" style="width:40px">
+        <div>${{activeEstimate.trailerCost}}</div>
+        <div>${{activeEstimate.upgradeCost}}</div>
+        <div>${{activeEstimate.configuredCost}}</div>
+        <div>${{activeEstimate.retailPrice}}</div>
+      </td>
+    </tr>
+  </table>
+
+<p>*Box length is an estimate to determine extra cost per foot. Refer to the floorplan drawing for precise length</p>
+<!-- <table class='table table-bordered table-condensed config-print' ng-if='curConfig.length!==0'> -->
+  <div ng-repeat="supercategory in curConfig" ng-if="hasNonEmptyCategories(supercategory)">
+    <h6>{{supercategory[0].superName}}</h6>
+    <table class="table table-bordered table-condensed config-print" style="margin:-1px">
+      <!-- <tr><td colspan="3" class="text-center">{{supercategory[0].superName}}</td></tr> -->
+      <tr>
+        <td style="width:30%"> Category </td>
+        <td style="width:50%"> Name </td>
+        <!-- <td style="width:15%"> Quantity </td> -->
+        <!-- <td style="width:15%"> Cost Each </td> -->
+        <td style="width:15%"> Added Cost </td>
+      </tr>
+    </table>
+    <table class="table table-bordered table-condensed config-print" style="margin:-1px" ng-repeat='item in supercategory | filter:{itemName: "!None"}:true'>
+      <tr>
+        <td style="width:30%"> {{item.categoryName}} </td>
+        <td style="width:50%"> {{item.itemName}} </td>
+        <!-- <td style="width:15%"> {{item.quantity}} </td> -->
+        <td style="width:15%"> ${{item.quantity > 0 ? item.quantity*item.itemCost : item.itemCost}} </td>
+        <!-- <td style="width:15%"> ${{item.quantity*item.itemCost}} </td> -->
+      </tr>
+    </table>
+  </div>
+
+  <h6>Special Requests</h6>
+  <table class="table table-bordered table-condensed config-print" style="margin:0">
+    <tr ng-repeat="request in specialRequests">
+      <td style="width:85%"> {{request.description}} </td>
+      <td style="width:15%"> {{request.cost}} </td>
+    </tr>
+  </table>
+  <div ng-if='specialRequests.length == 0' class='center-block'>
+    No Special Requests on this order
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<!--<div ng-include='navTemplate.url'></div>-->
+
+<div class="form-inline">
+  <input type="text" class="form-control" ng-model="search" placeholder="search" style="width:200px">
+  <select class="form-control" ng-model="selectedSuperCategoryId">
+    <option value="0">Show All</option>
+    <option ng-repeat="sc in superCategories" value="{{sc.superId}}">{{sc.superName}}</option>
+  </select>
+</div>
+<table class="table" ng-cloak>
+    <thead>
+        <th class="col-xs-1"> Rank </th>
+        <th> Name </th>
+        <th> SuperCategory </th>
+        <th> Selection Type </th>
+        <th> Actions </th>
+    </thead>
+
+    <tr>
+        <td>
+            <input type="text" class='form-control' ng-model="newCategory.rank" />
+        </td>
+        <td>
+            <input type="text" class='form-control' ng-model="newCategory.name" />
+        </td>
+        <td>
+            <select class="form-control" ng-model="newCategory.superId" ng-options="sc.superId as sc.superName for sc in superCategories"></select>
+        </td>
+        <td>
+            <select class="form-control" ng-model="newCategory.isMultiSelect" id="category-name-input">
+                <option value="true">Multiple</option>
+                <option value='false'>Single</option>
+            </select>
+        </td>
+        <td>
+            <button type="button" ng-click='addCategory(newCategory)' class='btn btn-block btn-primary'>Add Category</button>
+        </td>
+    </tr>
+
+    <tbody ng-repeat="superCategory in superCategories" ng-if="selectedSuperCategoryId == superCategory.superId || selectedSuperCategoryId == 0">
+        <!-- <tr>
+            <td>
+                {{superCategory.superName}}
+            </td>
+        </tr> -->
+        <tr ng-repeat="category in superCategory.categories | filter:search">
+            <td>
+                <input name="name" type="text" class='form-control' ng-model="category.rank" />
+            </td>
+            <td>
+                <input name="name" type="text" class='form-control' ng-model="category.categoryName" />
+            </td>
+            <td>
+                <select type="text" class="form-control" ng-model="category.superId" ng-options="sc.superId as sc.superName for sc in superCategories"></select>
+            </td>
+            <td>
+                <select type="text" class="form-control" ng-model="category.isMultiSelect">
+                    <option value="true">Multiple</option>
+                    <option value='false'>Single</option>
+                </select>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <button type="button" ng-click='updateCategory(category)' class='btn btn-default'>Update</button>
+                    <button type="button" ng-click='editItems(category)' class='btn btn-success'>Items</button>
+                    <!-- <button type="button" ng-click='deleteCategory(category)' class='btn btn-danger'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button> -->
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

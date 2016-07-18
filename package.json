@@ -1,0 +1,31 @@
+{
+  "name": "LoganCoach-dealer-ordering",
+  "version": "0.5.0",
+  "engines": {
+    "node": "0.12.2"
+  },
+  "private": true,
+  "scripts": {
+    "postinstall": "cd client && bower install && cd ../",
+    "start": "node app.js",
+    "pretest": "node_modules/.bin/pm2 start app.js -f > /dev/null && sh usefullScripts/setuptestdatabase.sh",
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "posttest": "node_modules/.bin/pm2 stop app.js > /dev/null",
+    "localtest": "mocha"
+  },
+  "main": "app.js",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "bower": "latest",
+    "chai": "~3.5.0",
+    "express": "3.3.7",
+    "express-sslify": "0.0.1",
+    "mocha": "~2.4.5",
+    "mysql": "~2.0.0-rc1",
+    "nodemailer": "~0.5.8",
+    "phantomjs-prebuilt": "~2.1.7",
+    "pm2": "~1.1.2",
+    "request": "~2.33.0",
+    "request-json": "~0.5.5"
+  }
+}

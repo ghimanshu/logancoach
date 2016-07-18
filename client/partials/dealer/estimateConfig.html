@@ -1,0 +1,174 @@
+<!-- <!--<div ng-include='navTemplate.url'></div>--> -->
+<!-- <div style="position:fixed; z-index:10; right:5px; top:5px;">
+  <div ng-repeat="alert in alerts" ng-click="alerts.shift()" class="alert alert-{{alert.type}}" >{{alert.msg}}</div>
+</div> -->
+
+<style media="screen">
+  .table-input {
+    width: 100%;
+    height: 100% !important;
+    border: none;
+    cursor: pointer;
+  }
+</style>
+
+<div class="navbar navbar-default navbar-fixed-top" style="margin-bottom:0px">
+  <!-- <div class="container text-center"> -->
+
+  <div class="navbar-header">
+    <a class="navbar-brand">{{dealerName}}</a>
+  </div>
+  <!-- <div class="navbar-collapse collapse"> -->
+  <ul class="nav navbar-nav">
+    <li class="btn-group">
+      <button type="button" ng-click="save()" class="btn btn-primary navbar-btn" ng-disabled="isAdmin" >{{savingText}}</button>
+      <button type="button" ng-click="saveAndReturn()" class="btn btn-warning navbar-btn" ng-disabled="isAdmin"> Save And Return</button>
+      <button type="button" ng-click="goback()" class="btn btn-default navbar-btn">Cancel</button>
+    </li>
+    <li><a href="/logout">Logout</a></li>
+  </ul>
+  <!-- <form class="navbar-form navbar-right" role="search">
+    <div class="form-group">
+      <input type="text" class="form-control" ng-model="nameFilter" placeholder="Search">
+    </div> -->
+  <!-- </form> -->
+<!-- </div> -->
+    <!-- <input type="text" class="form-control navbar-right" style="width:100px" ng-model="nameFilter" placeholder="Filter"> -->
+  <!-- </div> -->
+</div><div style="margin-top:50px"></div>
+<!-- <div style="position:fixed;z-index:10" ng-repeat="alert in alerts" ng-click="alerts.shift()" class="col-xs-push-2 col-xs-8 animate-repeat add-shadow alert alert-{{alert.type}}" >{{alert.msg}}</div> -->
+
+
+<div class="col-xs-2 add-shadow" style="position:fixed; height:100%; margin-top:0; padding-top:20px">
+  <!-- <h3 class="text-center">Current Estimate</h3> -->
+  <div class="well" style="padding:2px">
+    <label for="">Total:</label><span>${{totalCost}}</span><br>
+    <label for="">Box Length:</label><span>{{additionalTrailerLength}}ft</span><br>
+    <label for="">Box Height Cost:</label><p>{{additionalTrailerLength}}ft * ${{heightCost}}/ft = ${{additionalTrailerLength * heightCost}}</p>
+    <label for="">Box Width Cost:</label><p>{{additionalTrailerLength}}ft * ${{widthCost}}/ft = ${{additionalTrailerLength * widthCost}}</p>
+  </div>
+  <div ng-repeat="alert in alerts" ng-click="alerts.shift()" class="animate-repeat alert alert-{{alert.type}}" >{{alert.msg}}</div>
+
+</div>
+
+<div class="col-xs-8 col-xs-push-2" style="padding:10px 20px">
+  <!-- <div class="btn-group" role="group">
+    <button ng-hide="superCategory.id == 2 && !hasLivingQuarters" ng-repeat="superCategory in curEstimate | orderBy:'id'" type="button" class="btn btn-{{superCategory.id == selectedSuperCategory ? 'primary' : 'default'}}" ng-click="selectCategory(superCategory.id)">{{superCategory.name}}</button>
+  </div> -->
+  <!-- <ul class="nav nav-pills">
+    <li ng-repeat="superCategory in curEstimate | orderBy:'id'" role="presentation" class="{{superCategory.id == selectedSuperCategory ? 'active' : ''}}"><a ng-click="selectCategory(superCategory.id)">{{superCategory.name}}</a></li>
+  </ul> -->
+  <!-- <button ng-click="advancePrevious" class="btn btn-default"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+  <button ng-click="advanceNext" class="btn btn-default" style="float:right"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button> -->
+    <table id="{{superCategory.id}}" ng-repeat="superCategory in curEstimate | orderBy:'id'" ng-show="selectedSuperCategory == superCategory.id" class='table table-bordered animate-repeat' style="margin-top: 15px; padding: 0">
+      <!-- <tr ng-if="superCategory.name">
+        <td colspan=3>
+          <h3>{{superCategory.name}}</h3>
+        </td>
+      </tr> -->
+      <thead>
+        <!-- <th class="text-right" style="width:30%">
+          Category
+        </th>
+        <th style="width:65%">
+          Option
+        </th> -->
+        <!-- <th style="width:10%">
+          Additional Cost
+        </th> -->
+      </thead>
+      <tr ng-repeat="category in superCategory.categories | orderBy:'rank' | LQCategoryfilter:hasLivingQuarters">
+        <td class="text-right" ng-if="category.items[0].isMultiSelect === 'false'">
+          {{category.name}}
+        </td>
+        <!-- <td ng-if="category.items[0].isMultiSelect === 'false'" ng-class="(missingSelection(category)?'error':'')"> -->
+        <td style="padding:0" ng-if="category.items[0].isMultiSelect === 'false'">
+          <select ng-if="category.items.length>1" class="table-input" ng-change="validateExclusions(category.selectedItem)" type="text" ng-init="selectActiveItem(category)" ng-model='category.selectedItem' ng-options="(item.itemName+' ($'+item.itemCost+')') for item in category.items|orderBy:'itemRank'">
+            <!-- TODO: we really need something like this to work, because you currently can't unselect something you don't want that is optional -->
+            <!-- <option ng-if="category.optional" value="">None</option> -->
+          </select>
+          <p ng-if="category.items.length==1">
+            {{category.items[0].itemName}}
+          </p>
+        </td>
+        <td ng-if="category.items[0].isMultiSelect === 'false'">
+          ${{category.selectedItem.itemCost || 0}}
+        </td>
+        <td colspan="2" ng-if="category.items[0].isMultiSelect === 'true'" style="padding:0">
+          <table class='table inner-table table-bordered'>
+            <tbody>
+              <tr ng-repeat="item in category.items | orderBy:'itemRank'">
+                <td style="width:20%">
+                  {{category.items[0].categoryName}}
+                </td>
+                <td style="width:20%">
+                  {{item.itemName}}
+                </td>
+                <td style="width:20%">
+                  <select class="table-input" ng-change='validateExclusions({{item}})' ng-model='item.quantity' ng-options="n for n in [] | range:0:item.maxQuantity"></select>
+                </td>
+                <td style="width:20%">
+                  @ ${{item.itemCost}} ea.
+                  <span class="pull-right">=</span>
+                </td>
+                <td style="width:20%">
+                  ${{item.quantity*item.itemCost}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <!-- <div class="btn-group" role="group">
+      <button ng-hide="superCategory.id == 2 && !hasLivingQuarters" ng-repeat="superCategory in curEstimate | orderBy:'id'" type="button" class="btn btn-{{superCategory.id == selectedSuperCategory ? 'primary' : 'default'}}" ng-click="selectCategory(superCategory.id)">{{superCategory.name}}</button>
+    </div> -->
+      <h3>Special Requests</h3>
+      <p>
+        If you need anything that cannot be accounted for in the above configuration please add it here. It is recommended that you call a representative of Logan Coach to verify the cost prior to submitting it as part of an order.
+        <br>
+      </p>
+      <table class="table table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th class="col-md-9">Description</th>
+            <th class="col-md-2">Price</th>
+            <th class="col-md-1"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:0">
+              <input class="form-control" type="text" ng-model='newSpecialRequest.description' />
+            </td>
+            <td style="padding:0">
+              <input class="form-control" type="number" ng-model='newSpecialRequest.cost' />
+            </td>
+            <td style="padding:0">
+              <input class="btn btn-info btn-block" type="button" class="form-control" value="Add Request" ng-disabled="disableAddSpecialRequestButton(newSpecialRequest)" ng-click="addNewSpecialRequest()" </td>
+          </tr>
+          <tr ng-repeat="request in specialRequests">
+            <td style="padding:0">
+              <p>{{request.description}}</p>
+            </td>
+            <td style="padding:0">
+              <p>{{request.cost}}</p>
+            </td>
+            <td style="padding:0">
+              <input class="btn btn-danger" type="button" class="form-control" value="Delete Request" ng-click="deleteRequest(request)" </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-xs-2 col-xs-push-10 add-shadow btn-group-vertical" style="position:fixed; height:100%;padding:0px">
+      <!-- <h3>Categories</h3> -->
+      <!-- <div class="btn-group-vertical" style="width:100%"role="group" aria-label="..."> -->
+        <button ng-show="superCategoryVisible(superCategory.name)"
+        ng-repeat="superCategory in curEstimate | orderBy:'id'" type="button"
+        class="btn btn-block btn-{{superCategory.id == selectedSuperCategory ? 'primary' : 'default'}}"
+        ng-click="selectCategory(superCategory.id)"
+        style="text-align:left;padding-left:5px">
+        <span class="badge" >{{itemCount(superCategory.categories)}}</span> {{cleanedName(superCategory.name)}}
+        </button>
+    <!-- </div> -->
+    </div>

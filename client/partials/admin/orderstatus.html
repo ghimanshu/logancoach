@@ -1,0 +1,43 @@
+<!--<div ng-include='navTemplate.url'></div>-->
+<div class="containter">
+  <div class="col-md-12">
+    <input type="text" class="form-control" ng-model="search" placeholder="search" style="width:200px">
+    <table class="table">
+      <thead>
+        <th>
+          Dealer Name
+        </th>
+        <th>
+          Tracking Number
+        </th>
+        <th>
+          Customer Name
+        </th>
+        <th>
+          Status
+        </th>
+        <th>
+
+        </th>
+      </thead>
+      <tr ng-repeat="estimate in estimates | filter:search">
+        <td>
+          {{estimate.dealer}}
+        </td>
+        <td>
+          {{estimate.estimate}}
+        </td>
+        <td>
+          {{estimate.description}}
+        </td>
+        <td>
+          <input type="text" class="form-control" ng-model="estimate.status">
+          <!-- {{estimate.status}} -->
+        </td>
+        <td>
+          <button class="btn btn-block btn-primary" ng-click="update(estimate.estimateId, estimate.status)" type="button">Update</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

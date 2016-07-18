@@ -1,0 +1,28 @@
+<div>
+  <div class="modal-header">
+    <h3 class="modal-title">{{heading}}</h3>
+  </div>
+  <form>
+
+    <div class="modal-body">
+
+      <form name="addUserForm">
+        <label for="userName">User Name</label>
+        <input id="userName" type="text" class="form-control" ng-change="needUpdate('username')" ng-model="user.username" id="category-name-input" />
+
+        <label ng-hide="user.id" for="password">Password</label>
+        <input ng-hide="user.id" id="password" type="text" class="form-control" ng-change="needUpdate('password')" ng-model="user.password" />
+
+        <label for="email">Email</label>
+        <input id="email" type="email" class="form-control" ng-change="needUpdate('email')" ng-model="user.email" />
+
+        <lable for="admin">Administrator?</lable>
+        <input id="admin" type="checkbox" class="form-control" ng-change="needUpdate('admin')" ng-model="user.admin" />
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="save()">Save</button>
+      <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+    </div>
+    </form>
+</div>

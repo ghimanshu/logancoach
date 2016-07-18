@@ -1,0 +1,25 @@
+
+<div class="container text-center ">
+    <!--<div class="padd wdth row"><img src="/assets/logo.png" alt="logan coach logo" class="img-responsive imgCenter" /></div>-->
+    <div class="row">
+        <div class="col-md-5 col-md-offset-3">
+            <img src="/assets/logo.png" alt="logan coach logo" class="img-responsive imgCenter" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5 col-md-offset-3">
+            <form role="form" class="loginForm">
+                <div class="form-group">
+                    <input type="text" placeholder="Username" class="form-control" ng-model="user.username">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" class="form-control" ng-model="user.password">
+                </div>
+                <div class="text-left form-group"><a href="">Forget Your Password?</a></div>
+                <div class="row align-right">
+                    <div class="col-md-6 col-md-offset-6 fa-align-center"><button class="btn btn-default waves-effect">Register</button>&nbsp;<button class="btn btn-default waves-effect" ng-click="login(user)">Signin</button></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

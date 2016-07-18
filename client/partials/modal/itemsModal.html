@@ -1,0 +1,61 @@
+<div>
+    <!-- <div class="modal-header"> -->
+        <h3 class="modal-title">{{category.categoryName}}</h3>
+    <!-- </div> -->
+    <!-- <form> -->
+        <!-- <div class="modal-body"> -->
+            <table class="table table-bordered table-condensed">
+                <thead>
+                    <th class="col-xs-5">Item Name</th>
+                    <th class="col-xs-2">Default Price</th>
+                    <th class="col-xs-2">Length Added</th>
+                    <th class="col-xs-3">Actions</th>
+                </thead>
+                <tr>
+                    <td class="col-xs-5">
+                        <input name='name' type="text" placeholder="New Item Name" class="form-control" ng-model='newItem.itemName' required ng-minlength=1 ng-maxlength=45 />
+                    </td>
+                    <td class="col-xs-2">
+                        <input name='price' ng-minlength=1 type="number" class="form-control" ng-model='newItem.defaultPrice' required />
+                    </td>
+                    <td class="col-xs-2">
+                        <input name='lengthAdded' type="number" class="form-control" ng-model='newItem.lengthAdded' />
+                    </td>
+                    <td class="col-xs-3">
+                        <button name='submitbutton' type="button" ng-click="saveNewItem()" class="btn btn-block btn-primary">Add Item</button>
+                    </td>
+
+                </tr>
+                <tr ng-repeat="item in items">
+                  <td class="col-xs-5">
+                    <input name='oldItemName' type="text" class="form-control col-xs-4" ng-model='item.itemName' placeholder="Name" ng-minlength=1 reqired />
+                  </td>
+                  <td class="col-xs-2">
+                    <input name="oldItemPrice" type="number" required placeholder="Default Price" class="form-control" ng-minlength=1 ng-model='item.defaultPrice' />
+                  </td>
+                  <td class="col-xs-2">
+                    <input name="lengthAdded" type="number" required placeholder="Length Added" class="form-control" ng-minlength=1 ng-model='item.lengthAdded' />
+                  </td>
+                  <td class="col-xs-3">
+                    <!-- <button type="button" ng-click="deleteItem(item)" class="btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button> -->
+                    <button type="button" ng-click="updateItem(item)" class="btn btn-block btn-default">Update</button>
+                  </td>
+                </tr>
+            </table>
+
+            <!-- <ul class="list-group full-length" ui-sortable="sortableItemOptions" ng-model="items"> -->
+                <!-- <li class="list-group-item" ng-repeat="item in items" ng-form name="oldItemForm"> -->
+                    <!-- <div class="row"> -->
+                    <!-- </div> -->
+                <!-- </li> -->
+            <!-- </ul> -->
+
+
+        <!-- </div> -->
+
+        <!-- <div class="modal-footer"> -->
+            <!-- <button class="btn btn-primary" ng-click="save()">Save</button> -->
+            <button class="btn btn-default btn-block" ng-click="cancel()">Back</button>
+        <!-- </div> -->
+    </form>
+</div>

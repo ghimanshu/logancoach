@@ -1,0 +1,34 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">Create New Estimate</h3>
+    </div>
+    <form>
+
+        <form name="createEstimateForm">
+            <div class="modal-body">
+                <div class="form-group">
+                  <label>Tracking Number</label>
+                  <input type="text" class="form-control" ng-model="newEstimate.estimateName" id="category-name-input" autofocus/>
+                </div>
+                <div class="form-group">
+                  <label>Customer Name</label>
+                  <textarea type="text" rows=1 class="form-control" ng-model="newEstimate.estimateDescription" /></textarea>
+                </div>
+                <hr>
+                <div class="form-group">
+                  <label>Trailer</label>
+                  <select type="text" class="form-control" ng-model="trailer" ng-options="trailer.trailerName for trailer in trailers" id="super-category-name-input">
+                </select>
+                </div>
+                <div ng-if="trailer">
+                    <label>Base Price:</label>
+                    {{trailer.trailerCost | currency:"$":0}} <a href="{{trailer.trailerUrl}}" target="_blank">details</a>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="save()">Create</button>
+                <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+            </div>
+        </form>
+</div>
